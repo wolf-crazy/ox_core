@@ -16,18 +16,18 @@ jobs:
     steps:
       - name: Install zip
         run: sudo apt-get update && sudo apt-get install -y zip
+        
+      - name: Generate GitHub App token
+        id: app_token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          
-      - name: Generate GitHub App token
-        id: app_token
-        uses: tibdex/github-app-token@v2
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Get latest code
         uses: actions/checkout@v4
