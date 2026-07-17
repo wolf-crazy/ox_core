@@ -76,10 +76,13 @@ jobs:
         with:
           script: |
             const tag = '${{ github.ref_name }}';
-            await github.rest.git.updateRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'tags/latest',
-              sha: context.sha,
-              force: true
-            });
+            const ref = `tags/latest`;
+            const sha = context.sha;
+            try {
+              await github.rest.git.getRef({ owner, repo, ref });
+              // já existe → atualiza
+              await github.rest.git.updateRef({ owner, repo, ref, sha, force: true });
+            } catch (e) {
+              // não existe → cria
+              await github.rest.git.createRef({ owner, repo, ref: `refs/${ref}`, sha });
+            }
