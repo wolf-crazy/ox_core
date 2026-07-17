@@ -64,11 +64,6 @@ jobs:
           cp -r ./common/data ./temp/ox_core/common/data
           cd ./temp && zip -r ../ox_core.zip ./ox_core
 
-      - name: Publish package to npm registry
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
